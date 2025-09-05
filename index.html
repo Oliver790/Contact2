@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oliver Klučár - Kontakty</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden;
+            text-align: center;
+            padding: 40px 30px;
+        }
+        
+        .profile {
+            margin-bottom: 30px;
+        }
+        
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #6a11cb;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 50px;
+        }
+        
+        h1 {
+            font-size: 32px;
+            color: #2575fc;
+            margin-bottom: 10px;
+        }
+        
+        .title {
+            color: #6a11cb;
+            font-size: 18px;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+        
+        .contact-info {
+            margin-bottom: 30px;
+        }
+        
+        .contact-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .contact-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 22px;
+            color: white;
+        }
+        
+        .instagram .icon { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .messenger .icon { background-color: #0084ff; }
+        .viber .icon { background-color: #7360f2; }
+        .snapchat .icon { background-color: #fffc00; color: black; }
+        .whatsapp .icon { background-color: #25d366; }
+        .email .icon { background-color: #ea4335; }
+        .phone .icon { background-color: #34a853; }
+        
+        .details {
+            text-align: left;
+            flex: 1;
+        }
+        
+        .platform {
+            font-weight: 600;
+            color: #6a11cb;
+            margin-bottom: 5px;
+        }
+        
+        .value {
+            font-size: 16px;
+            color: #333;
+            word-break: break-all;
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .modal h2 {
+            margin-bottom: 15px;
+            color: #2575fc;
+        }
+        
+        .modal-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .profile-pic {
+                width: 120px;
+                height: 120px;
+                font-size: 40px;
+            }
+            
+            .contact-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .icon {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .details {
+                text-align: center;
+            }
+            
+            .action-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile">
+            <div class="profile-pic">OK</div>
+            <h1>Oliver Klučár</h1>
+            <p class="title">Kontaktujte ma cez moje sociálne siete</p>
+        </div>
+        
+        <div class="contact-info">
+            <a href="https://www.instagram.com/klucaroliver_/" target="_blank" class="contact-link">
+                <div class="contact-item instagram">
+                    <div class="icon">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <div class="details">
+                        <div class="platform">Instagram</div>
+                        <div class="value">@klucaroliver_</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="https://m.me/oliverlucar" target="_blank" class="contact-link">
+                <div class="contact-item messenger">
+                    <div class="icon">
+                        <i class="fab fa-facebook-messenger"></i>
+                    </div>
+                    <div class="details">
+                        <div class="platform">Messenger</div>
+                        <div class="value">m.me/oliverlucar</div>
+                    </div>
+                </div>
+            </a>
+            
+            <div class="contact-item viber" onclick="showActionModal('Viber', '+421903929325', 'viber://add?number=421903929325')">
+                <div class="icon">
+                    <i class="fab fa-viber"></i>
+                </div>
+                <div class="details">
+                    <div class="platform">Viber</div>
+                    <div class="value">+421 903 929 325</div>
+                </div>
+            </div>
+            
+            <a href="https://www.snapchat.com/add/oliverklucar777" target="_blank" class="contact-link">
+                <div class="contact-item snapchat">
+                    <div class="icon">
+                        <i class="fab fa-snapchat-ghost"></i>
+                    </div>
+                    <div class="details">
+                        <div class="platform">Snapchat</div>
+                        <div class="value">oliverklucar777 </div>
+                    </div>
+                </div>
+            </a>
+            
+            <div class="contact-item whatsapp" onclick="showActionModal('WhatsApp', '+421903929325', 'https://wa.me/421903929325')">
+                <div class="icon">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <div class="details">
+                    <div class="platform">WhatsApp</div>
+                    <div class="value">+421 903 929 325</div>
+                </div>
+            </div>
+            
+            <div class="contact-item email" onclick="showActionModal('Email', 'oliverklucar12@gmail.com', 'mailto:oliverklucar12@gmail.com')">
+                <div class="icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="details">
+                    <div class="platform">Email</div>
+                    <div class="value">oliverklucar12@gmail.com</div>
+                </div>
+            </div>
+            
+            <div class="contact-item phone" onclick="showActionModal('Telefón', '+421903929325', 'tel:+421903929325')">
+                <div class="icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="details">
+                    <div class="platform">Telefón</div>
+                    <div class="value">+421 903 929 325</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button class="action-btn" onclick="saveAllContacts()">
+                <i class="fas fa-save"></i> Uložiť všetky kontakty
+            </button>
+            <button class="action-btn" onclick="shareProfile()">
+                <i class="fas fa-share-alt"></i> Zdieľať profil
+            </button>
+            <button class="action-btn" onclick="downloadVCard()">
+                <i class="fas fa-address-card"></i> Stiahnuť vCard
+            </button>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 Oliver Klučár. Všetky práva vyhradené.</p>
+        </div>
+    </div>
+
+    <div class="modal" id="actionModal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Akcia</h2>
+            <p id="modalText">Text</p>
+            <div class="modal-buttons">
+                <button class="action-btn" id="modalActionBtn" onclick="performModalAction()">Vykonať akciu</button>
+                <button class="action-btn" id="modalCopyBtn" onclick="copyModalContent()">Kopírovať</button>
+                <button class="action-btn" style="background: #6c757d;" onclick="closeModal()">Zavrieť</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Text bol skopírovaný do schránky</div>
+
+    <script>
+        // Premenné pre modálne okno
+        let currentActionUrl = '';
+        let currentValue = '';
+        
+        // Jednoduchá animácia pri načítaní stránky
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactItems = document.querySelectorAll('.contact-item');
+            contactItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, 100 + (index * 100));
+            });
+        });
+
+        // Funkcia na zobrazenie modálneho okna
+        function showActionModal(platform, value, actionUrl = null) {
+            const modal = document.getElementById('actionModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalText = document.getElementById('modalText');
+            const modalActionBtn = document.getElementById('modalActionBtn');
+            const modalCopyBtn = document.getElementById('modalCopyBtn');
+            
+            modalTitle.textContent = platform;
+            modalText.textContent = value;
+            
+            currentActionUrl = actionUrl;
+            currentValue = value;
+            
+            if (actionUrl) {
+                modalActionBtn.style.display = 'block';
+                modalActionBtn.textContent = `Otvoriť v ${platform}`;
+            } else {
+                modalActionBtn.style.display = 'none';
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        // Funkcia na vykonanie akcie v modálnom okne
+        function performModalAction() {
+            if (currentActionUrl) {
+                window.location.href = currentActionUrl;
+            }
+            closeModal();
+        }
+
+        // Funkcia na kopírovanie obsahu modálneho okna
+        function copyModalContent() {
+            navigator.clipboard.writeText(currentValue).then(() => {
+                showToast('Text bol skopírovaný do schránky');
+            }).catch(err => {
+                console.error('Chyba pri kopírovaní: ', err);
+                showToast('Chyba pri kopírovaní');
+            });
+        }
+
+        // Funkcia na zatvorenie modálneho okna
+        function closeModal() {
+            document.getElementById('actionModal').style.display = 'none';
+        }
+
+        // Funkcia na zobrazenie toast správy
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Funkcia na uloženie všetkých kontaktov
+        function saveAllContacts() {
+            const contacts = `
+Oliver Klučár
+Instagram: @klucaroliver_
+Messenger: m.me/oliverlucar
+Viber: +421903929325
+Snapchat: oliverklucar
+WhatsApp: +421903929325
+Email: oliverklucar12@gmail.com
+Telefón: +421903929325
+            `;
+            
+            navigator.clipboard.writeText(contacts).then(() => {
+                showToast("Všetky kontakty boli skopírované do schránky!");
+            }).catch(err => {
+                console.error('Chyba pri kopírovaní: ', err);
+                showToast("Nie je možné skopírovať kontakty.");
+            });
+        }
+
+        // Funkcia na zdieľanie profilu
+        function shareProfile() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Oliver Klučár - Kontakty',
+                    text: 'Pozri si kontakty Olivera Klučára',
+                    url: window.location.href
+                }).then(() => {
+                    console.log('Profil úspešne zdieľaný');
+                }).catch(err => {
+                    console.error('Chyba pri zdieľaní: ', err);
+                    showToast("Zdieľanie nebolo úspešné. Skopírujte si prosím URL adresu.");
+                });
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    showToast("URL adresa bola skopírovaná do schránky! Môžete ju teraz zdieľať.");
+                }).catch(err => {
+                    console.error('Chyba pri kopírovaní: ', err);
+                    showToast("Nie je možné skopírovať URL adresu.");
+                });
+            }
+        }
+
+        // Funkcia na vytvorenie a stiahnutie vCard
+        function downloadVCard() {
+            const vCard = `BEGIN:VCARD
+VERSION:3.0
+N:Klučár;Oliver;;;
+FN:Oliver Klučár
+TEL;TYPE=CELL:+421903929325
+EMAIL:oliverklucar12@gmail.com
+URL:https://www.instagram.com/klucaroliver_/
+NOTE:WhatsApp: +421903929325, Viber: +421903929325, Snapchat: oliverklucar
+END:VCARD`;
+
+            const blob = new Blob([vCard], { type: 'text/vcard' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'oliver_klucar.vcf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast("vCard bola stiahnutá");
+        }
+
+        // Zatvorenie modálneho okna pri kliknutí mimo neho
+        window.onclick = function(event) {
+            const modal = document.getElementById('actionModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
+</body>
+</html>
